@@ -1,7 +1,7 @@
 package com.id.recipes.recipes_api.model;
 import java.util.List;
 
-public record RecipeDTO (Integer id,
+public record RecipeDTO (long id,
                          String title,
                          boolean vegetarian,
                          int servings,

@@ -27,7 +27,7 @@ class RecipeControllerTest {
         Recipe r1 = new Recipe();
         r1.setId(1);
 
-        controller.getAll();
+        controller.getAllRecipes();
 
     }
 }
