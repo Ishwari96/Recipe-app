@@ -1,13 +1,13 @@
 package com.id.recipes.recipes_api.controller;
 
 import com.id.recipes.recipes_api.model.RecipeDTO;
-import com.id.recipes.recipes_api.model.RecipeEntity;
 import com.id.recipes.recipes_api.service.RecipeService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Comparator;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class RecipeController {
@@ -18,12 +18,16 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
+    @SuppressWarnings("NullableProblems")
     @GetMapping(path = "/recipes", produces = "application/json")
-    public Map<String, Object> list() {
-        var all = recipeService.findAll().stream()
-                .sorted(Comparator.comparing(RecipeEntity::getId))
-                .map(RecipeDTO::map).toList();
-        return Map.of("recipes", all);
+    public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
+        List<RecipeDTO> recipes =
+                Optional.ofNullable(recipeService.getAll())
+                        .orElseGet(List::of);
+
+        return ResponseEntity.ok(recipes);
+
     }
+
 
 }

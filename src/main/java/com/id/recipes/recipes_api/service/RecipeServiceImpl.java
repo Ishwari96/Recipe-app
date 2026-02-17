@@ -1,11 +1,12 @@
 package com.id.recipes.recipes_api.service;
 
-import com.id.recipes.recipes_api.model.RecipeEntity;
+import com.id.recipes.recipes_api.model.RecipeDTO;
 import com.id.recipes.recipes_api.repository.RecipeServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipeServiceImpl implements RecipeService{
@@ -14,8 +15,14 @@ public class RecipeServiceImpl implements RecipeService{
     @Autowired
     RecipeServiceRepository recipeServiceRepository;
 
-    public List<RecipeEntity> findAll() {
-        return recipeServiceRepository.findAll();
+    /**
+     * Gets the all.
+     *
+     * @return the all recipes
+     */
+    @Override
+    public List<RecipeDTO> getAll() {
+        return recipeServiceRepository.findAll().stream().map(RecipeDTO::fromModel).collect(Collectors.toList());
     }
 
 }
