@@ -48,19 +48,21 @@ Swagger is integrated for easy access of API. It can be accessed via `http://loc
 		'/api/v1/recipe/'
 		
 		'Accept: application/json' -d 
-		'{ \ 
-		   "cookingInstruction": "string", \ 
-		   "ingredients": [ \ 
-		     { \ 
-		       "ingredientDesciption": "string", \ 
-		       "ingredientName": "string" \ 
-		     } \ 
-		   ], \ 
-		   "name": "string", \ 
-		   "numberOfPerson": 0, \ 
-		   "vegetarian": true \ 
-		}' 
-		
+                ' {
+                  "title": "string",
+                  "vegetarian": true,
+                  "numberOfPerson": 50,
+                  "cookingInstruction": "string",
+                  "ingredients": [
+                    {
+                      "id": 0,
+                      "name": "string",
+                      "description": "string",
+                      "recipeId": 0
+                    }
+                  ]
+                }' 
+            
 	
 ```
 - Update Recipe
@@ -72,21 +74,20 @@ Swagger is integrated for easy access of API. It can be accessed via `http://loc
 		'/api/v1/recipe/{id}'
 		
 		'Accept: application/json' -d 
-		'{ \ 
-		   "id": 5, \ 
-		   "name": "string test", \ 
-		   "createDate": "2020-10-26 13:26", \ 
-		   "numberOfPerson": 0, \ 
-		   "cookingInstruction": "string", \ 
-		   "ingredients": [ \ 
-		     { \ 
-		       "id": 10, \ 
-		       "ingredientName": "string", \ 
-		       "ingredientDesciption": "string" \ 
-		     } \ 
-		   ], \ 
-		   "vegetarian": true \ 
-		}'	 
+                '{
+                  "title": "string",
+                  "vegetarian": true,
+                  "numberOfPerson": 5,
+                  "cookingInstruction": "string",
+                  "ingredients": [
+                    {
+                      "id": 1,
+                      "name": "string",
+                      "description": "string",
+                      "recipeId": 1
+                    }
+                  ]
+                }'	 
 		
 
 ```
@@ -97,7 +98,7 @@ Swagger is integrated for easy access of API. It can be accessed via `http://loc
 ```
 		GET 
 		'Accept: application/json' 
-		'/api/v1/recipe/'
+		'/api/v1/recipes/'
 
 ```
 
@@ -117,28 +118,26 @@ Swagger is integrated for easy access of API. It can be accessed via `http://loc
 ```	
 		GET 
 		'Accept: application/json' 
-		'/api/v1/recipe/{id}'
+		'/api/v1/{}'
 
 ```
 
 - Search Recipe By Criteria
     - This method searches for the recipe that fits into the given criteria. User can search by any field of the Recipe. Following are the fields of the recipe.
         - name
-        - numberOfPerson
+        - servings
         - cookingInstruction
         - vegetarian
     - Search criteria needs field to search for with operator to apply on field.
-        - isVegetarian:true = here : is used to check equality. This criteria mean all the recipes which are vegetarian.
-        - numberOfPerson>5 = This is self-explanatory. It will bring all the recipes which can be served to more than 5 person.
-    - For now, I have implemented 3 operators, "<, >, :(==)"
+        - vegetarian:true = here : is used to check equality. This criteria mean all the recipes which are vegetarian.
+        - servings = This is self-explanatory. It will bring all the recipes which can be served to more than 5 person.
+    
     - Search criteria can also be put together with comma separated values.
-        - isVegetarian:true,numberOfPerson>5 = This will query the database with both the criteria "AND" operator.
-        - isVegetarian:true,'numberOfPerson>5 = This will query the database with both the criteria "OR" operator.
+        - vegetarian:true,servings>4 = This will query the database with both the criteria "AND" operator.
+        - vegetarian:true,servings>=4 = This will query the database with both the criteria "OR" operator.
 
 ```
-	GET 
-	'Accept: application/json' 
-	'/api/v1/recipe/searchByCriteria/isVegetarian%3Afalse'
+	http://localhost:8444/api/v1/filteredRecipes?vegetarian=true&servings=4&include=Sauce&exclude=Capsicum
 ```
 
 ## Test Scripts
@@ -146,10 +145,90 @@ Swagger is integrated for easy access of API. It can be accessed via `http://loc
 Postman test script is provided in postman/ folder. It can be used by importing script and environment to postman. Don't forget to select environment and whitelist host.
 
 ## Clarifications
-As per the requirement given, User should be able to search by all 5 fields of the recipe. Instead of creating different method. It is more feasible and reusable to create advance search functionality. I have not completed whole functionality currently, but it is reusable.
+As per the requirement given, User should be able to search in the recipes. Instead of creating different method. It is more feasible and reusable to create advance search functionality. I have not completed whole functionality currently, but it is reusable.
 
 All the validations are imaginary, it is only for the demo purpose.
 
-httpSecurity.csrf().disabled() is only used for demo purpose. It needs to be enabled for actual API. This is only to make it available to postman for testing.
-
 Code coverage is not considered for model, repository and dto classes.
+
+## Next steps
+
+Database Configuration
+This project uses two different database setups depending on the environment:
+H2 Database (Demo & Initial Development)
+
+Used for quick setup, local debugging, and early functional testing.
+Allows the application to run without requiring an external database installation.
+
+PostgreSQL (Production)
+
+Intended database for production to ensure reliable data persistence and performance.
+The application configuration can be easily switched to PostgreSQL using environment‑specific properties.
+
+
+🍽️ Domain Model Adjustments
+Ingredients Converted to Set
+During debugging, the ingredients field was changed from List to Set to ensure uniqueness and improve data consistency.
+This also aligns with business logic where duplicate ingredients do not make sense.
+Separate Request and Entity Models
+Different models are kept for:
+
+API Requests (DTOs)
+Persistence Layer (Entities)
+
+This design supports future flexibility, such as:
+
+Different naming conventions across UIs/frontend apps
+Backend refactoring without breaking clients
+Mapping customizations if request formats evolve
+
+
+🔍 Future Enhancements (Search & Functional Requirements)
+Further functional discussions are planned around:
+
+Search behavior and expected filtering logic
+Enhancing domain validation and business rules
+Adjusting entities, DTOs, or repository queries based on finalized requirements
+
+Once functional expectations are finalized, the codebase can be updated accordingly.
+
+🧪 Testing Notes
+Due to time constraints, only limited Postman integration test scripts could be created.
+Once deployed to the development environment, more detailed Postman tests will be added, including:
+
+Regression scenarios
+Error handling validations
+Negative test flows
+
+
+📨 Postman Improvements
+To make the API collection production-ready:
+
+A separate collection and environment have been created.
+DTAP-ready URLs (Dev, Test, Acceptance, Production) are managed using variable-based configurations.
+This enables easier switching between environments during CI/CD pipelines or manual testing.
+
+
+🔐 Security & Quality Integration
+Before merging into master, the application must pass the standard enterprise security and quality checks:
+
+SonarQube – Code quality & static analysis
+Nexus IQ – Dependency vulnerability scanning
+Fortify – Security scanning for code vulnerabilities
+
+These integrations ensure the application meets production readiness standards.
+
+🐳 Docker Image Submission
+To containerize and deliver the application:
+Dockerfile Creation
+
+A Dockerfile is included to package the application into a runnable container image.
+
+Docker Compose
+
+Docker Compose can be used for multi-container setups
+(e.g., application + PostgreSQL database).
+
+Image Submission
+
+The final Docker image can be pushed to any registry such as Docker Hub, AWS ECR, Azure Container Registry, etc.

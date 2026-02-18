@@ -54,5 +54,5 @@ public interface RecipeService {
      * @param searchCriteria required
      * @return recipe based on requirement
      */
-    public List<Recipe> findBySearchCriteria(SearchCriteria searchCriteria);
+    List<Recipe> findBySearchCriteria(SearchCriteria searchCriteria);
 }

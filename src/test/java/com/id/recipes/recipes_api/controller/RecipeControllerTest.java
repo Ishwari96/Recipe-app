@@ -9,7 +9,6 @@ import com.id.recipes.recipes_api.model.dto.IngredientDTO;
 import com.id.recipes.recipes_api.model.dto.RecipeDTO;
 import com.id.recipes.recipes_api.model.rest.RecipeRequest;
 import com.id.recipes.recipes_api.service.RecipeService;
-import com.id.recipes.recipes_api.utility.RecipeSpecification;
 import com.id.recipes.recipes_api.utility.SearchCriteria;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,7 +76,7 @@ class RecipeControllerTest {
 
         when(recipeService.createRecipe(any(RecipeRequest.class))).thenReturn(saved);
 
-        mockMvc.perform(post("/api/v1/recipes")
+        mockMvc.perform(post("/api/v1/recipe")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(req))
                 )
@@ -100,7 +99,7 @@ class RecipeControllerTest {
         RecipeDTO recipe = new RecipeDTO(1L, "milkshake", true, 2, ingredients, "mixer");
         when(recipeService.findById(1L)).thenReturn(recipe);
 
-        mockMvc.perform(get("/api/v1/1"))
+        mockMvc.perform(get("/api/v1/recipe/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("milkshake"));
     }
@@ -114,7 +113,7 @@ class RecipeControllerTest {
         when(recipeService.findById(id))
                 .thenThrow(new RecipeNotFoundException("Recipe not found"));
 
-        mockMvc.perform(get("/api/v1/{id}", id)
+        mockMvc.perform(get("/api/v1/recipe/{id}", id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -125,7 +124,7 @@ class RecipeControllerTest {
 
         doNothing().when(recipeService).deleteById(id);
 
-        mockMvc.perform(delete("/api/v1/{id}", id).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/api/v1/recipe/{id}", id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 

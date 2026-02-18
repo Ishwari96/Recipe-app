@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,17 +23,14 @@ import java.util.*;
 @RequestMapping("/api/v1")
 public class RecipeController {
 
-    private final RecipeService recipeService;
-    public RecipeController(RecipeService recipeService) {
-        this.recipeService = recipeService;
-    }
-
+    /** The recipeService instance of service class */
+    @Autowired
+    RecipeService recipeService;
 
     @Operation(
             summary = "Get all recipes",
             description = "Returns a list of all recipes in the system"
     )
-
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error",
@@ -40,7 +38,9 @@ public class RecipeController {
     })
 
     /**
-     * fetch all recipes
+     * Gets the all recipe
+     *
+     * @return the recipes
      */
     @GetMapping(path = "/recipes", produces = "application/json")
     public ResponseEntity<List<RecipeDTO>> getRecipes() {
@@ -65,7 +65,7 @@ public class RecipeController {
       @param id the id
      * @return the response entity
      */
-    @GetMapping("/{id}")
+    @GetMapping("/recipe/{id}")
     public ResponseEntity<RecipeDTO> findRecipeById(@PathVariable @Valid long id) {
         return ResponseEntity.ok(recipeService.findById(id));
     }
@@ -83,7 +83,7 @@ public class RecipeController {
 
       @param id the id
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/recipe/{id}")
     public ResponseEntity<Void> deleteRecipeById(@PathVariable @Valid long id) {
         recipeService.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -102,7 +102,7 @@ public class RecipeController {
       @param recipeRequest the recipe request
      * @return the response entity
      */
-    @PostMapping("/recipes")
+    @PostMapping("/recipe")
     public ResponseEntity<Recipe> createRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
         Recipe saved = recipeService.createRecipe(recipeRequest);
         return ResponseEntity.created(URI.create("/recipes/" + saved.getId())).body(saved);
@@ -128,7 +128,7 @@ public class RecipeController {
      * @param id            the id
      * @return the response entity
      */
-    @PutMapping("/{id}")
+    @PutMapping("/recipe/{id}")
     public ResponseEntity<Recipe> updateRecipe(@Valid @RequestBody RecipeRequest recipeRequest,
                                                        @PathVariable long id) {
         Recipe updated =  recipeService.updateRecipe(id, recipeRequest);
@@ -138,6 +138,14 @@ public class RecipeController {
     @Operation(
             summary = " filter recipes based on criteria"
     )
+    /**
+     * This method search for recipe from the database by the given search criteria
+     * 	 * Following is example of criteria. vegetarian:true
+     * 	 * numberOf servings
+     * 	 *
+     * 	 * @param searchCriteria the search criteria
+     * 	 * @return the list
+     */
     @GetMapping(path = "/filteredRecipes", produces = "application/json")
     public ResponseEntity<List<RecipeDTO>> filterRecipe(
             @RequestParam(required = false) Boolean vegetarian,
@@ -154,7 +162,7 @@ public class RecipeController {
 
         List<RecipeDTO> result;
         if (searchCriteria.isEmpty()) {
-            // No meaningful filters -> return all
+            // No filters added return all recipes
             result = Optional.ofNullable(recipeService.getAll())
                     .orElseGet(List::of);
         } else {

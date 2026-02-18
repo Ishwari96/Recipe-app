@@ -11,7 +11,7 @@ public record SearchCriteria(
         String instructionsContains,
         String instructionsNotContains
 ) {
-    /** Returns true when there are no meaningful filters */
+    /** Returns true when there are no filters provided*/
     public boolean isEmpty() {
         boolean vegetarianInactive = (vegetarian == null) || !Boolean.TRUE.equals(vegetarian);
         boolean servingsInactive = (servings == null) || servings <= 0;

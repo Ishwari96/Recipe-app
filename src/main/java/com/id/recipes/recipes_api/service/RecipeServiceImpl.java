@@ -110,18 +110,16 @@ public class RecipeServiceImpl implements RecipeService{
         return recipeRepository.save(existingRecipe);
     }
 
-
+    /**
+     * Search criteria
+     * @param searchCriteria received from front end
+     * @return list of recipe
+     */
     public List<Recipe> findBySearchCriteria(SearchCriteria searchCriteria) {
         List<Recipe> entities =  recipeRepository.findAll(RecipeSpecification.search(searchCriteria));
         return entities;
     }
 
-    /**
-     * Update ingredient
-     *
-     * @param ingredientParam the ingredient param
-     * @param listIngredients the list ingredients
-     */
     private void updateIngredient(Ingredient ingredientParam, Set<Ingredient> listIngredients) {
         for (Ingredient ingredient : listIngredients) {
             if (ingredient.getId() == ingredientParam.getId()) {

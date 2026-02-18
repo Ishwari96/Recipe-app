@@ -11,6 +11,11 @@ import java.util.List;
 
 public class RecipeSpecification {
 
+        /**
+         *  Search mechanism
+         * @param criteria received
+         * @return Sepecification recipe
+         */
         public static Specification<Recipe> search(SearchCriteria criteria) {
 
         return (root, query, cb) -> {
@@ -47,7 +52,7 @@ public class RecipeSpecification {
                 );
             }
 
-            // Description NOT contains
+            // Description does NOT contains
             if (StringUtils.isNotBlank(criteria.instructionsNotContains())) {
 
                 predicates.add(

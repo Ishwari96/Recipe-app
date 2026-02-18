@@ -16,7 +16,6 @@ import java.util.Date;
 /**
  * The Class GlobalExceptionHandler is for exception handling.
  */
-@SuppressWarnings("NullableProblems")
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -31,21 +30,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RecipeNotFoundException.class)
     public ResponseEntity<ErrorDetails> resourceNotFoundException(RecipeNotFoundException ex, WebRequest request) {
-        LOGGER.error(ex.getMessage(), ex);
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
-    }
-
-    /**
-     * Recipe attribute not found exception.
-     *
-     * @param ex      the ex
-     * @param request the request
-     * @return the response entity
-     */
-    @ExceptionHandler(RecipeAttributeNotFoundException.class)
-    public ResponseEntity<ErrorDetails> recipeAttributeNotFoundException(RecipeAttributeNotFoundException ex,
-                                                                         WebRequest request) {
         LOGGER.error(ex.getMessage(), ex);
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
@@ -77,22 +61,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(org.hibernate.exception.ConstraintViolationException.class)
     public ResponseEntity<ErrorDetails> handleConstraintViolationExceptionHibernate(
             org.hibernate.exception.ConstraintViolationException exception, WebRequest request) {
-        LOGGER.error(exception.getMessage(), exception);
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-
-    }
-
-    /**
-     * Handle method argument not valid exception.
-     *
-     * @param exception the exception
-     * @param request   the request
-     * @return the response entity
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorDetails> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
-                                                                              WebRequest request) {
         LOGGER.error(exception.getMessage(), exception);
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
