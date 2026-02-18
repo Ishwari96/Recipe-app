@@ -9,7 +9,6 @@ import com.id.recipes.recipes_api.model.rest.RecipeRequest;
 import com.id.recipes.recipes_api.repository.RecipeRepository;
 import com.id.recipes.recipes_api.utility.RecipeSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,7 +68,6 @@ public class RecipeServiceImpl implements RecipeService{
      * @param recipeRequest the recipe request received
      * @return the recipe
      */
-    @SuppressWarnings("unchecked")
     @Override
     public Recipe createRecipe(RecipeRequest recipeRequest) {
         Recipe createRecipe = new Recipe();
