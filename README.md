@@ -24,7 +24,7 @@ mvn spring-boot:run
 
 ```
 
-In case, If you want to run the application directly from IDE. Import the project to your favorite IDE as 'Existing maven project'. Select project from the IDE and run it as java application. “Don't forget to update maven ;)” I have configured the port to 8882 in properties. So the application can be accessed by `http://localhost:8882`
+In case, If you want to run the application directly from IDE. Import the project to your favorite IDE as 'Existing maven project'. Select project from the IDE and run it as java application. “Don't forget to update maven ;)” I have configured the port to 8444 in properties. So the application can be accessed by `http://localhost:8444`
 
 Application is using H2 inmemory database. Following is the details of connection.
 - `http://localhost:8444`
@@ -98,7 +98,7 @@ Swagger is integrated for easy access of API. It can be accessed via `http://loc
 ```
 		GET 
 		'Accept: application/json' 
-		'/api/v1/recipes/'
+		'/api/v1/recipes'
 
 ```
 
@@ -118,17 +118,18 @@ Swagger is integrated for easy access of API. It can be accessed via `http://loc
 ```	
 		GET 
 		'Accept: application/json' 
-		'/api/v1/{}'
+		'/api/v1/v1/recipe/{id}'
 
 ```
 
 - Search Recipe By Criteria
     - This method searches for the recipe that fits into the given criteria. User can search by any field of the Recipe. Following are the fields of the recipe.
-        - name
-        - servings
-        - cookingInstruction
         - vegetarian
-    - Search criteria needs field to search for with operator to apply on field.
+        - servings
+        - instructions Contains
+        - include ingredients
+        - exclude ingredients
+    - For now I have considered all query params for simplicity
         - vegetarian:true = here : is used to check equality. This criteria mean all the recipes which are vegetarian.
         - servings = This is self-explanatory. It will bring all the recipes which can be served to more than 5 person.
     
@@ -151,27 +152,16 @@ All the validations are imaginary, it is only for the demo purpose.
 
 Code coverage is not considered for model, repository and dto classes.
 
+Ingredient id is not needed in requestbody just to keep simple I have considered same model
+
+Pagination is not added so for ingredients I have added few max limit assumptions or values
+
 ## Next steps
-
-Database Configuration
-This project uses two different database setups depending on the environment:
-H2 Database (Demo & Initial Development)
-
-Used for quick setup, local debugging, and early functional testing.
-Allows the application to run without requiring an external database installation.
-
-PostgreSQL (Production)
-
-Intended database for production to ensure reliable data persistence and performance.
-The application configuration can be easily switched to PostgreSQL using environment‑specific properties.
-
 
 🍽️ Domain Model Adjustments
 Ingredients Converted to Set
 During debugging, the ingredients field was changed from List to Set to ensure uniqueness and improve data consistency.
-This also aligns with business logic where duplicate ingredients do not make sense.
-Separate Request and Entity Models
-Different models are kept for:
+This also aligns with business logic. Separate Request and Entity Models kept.
 
 API Requests (DTOs)
 Persistence Layer (Entities)

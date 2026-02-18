@@ -7,6 +7,7 @@ import com.id.recipes.recipes_api.utility.SearchCriteria;
 import com.id.recipes.recipes_api.model.rest.RecipeRequest;
 import com.id.recipes.recipes_api.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -73,7 +74,7 @@ public class RecipeController {
 
     @Operation(summary = "Delete recipe by id")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Deleted"),
+            @ApiResponse(responseCode = "200", description = "Deleted"),
             @ApiResponse(responseCode = "404", description = "Recipe not found",
                     content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
@@ -86,7 +87,7 @@ public class RecipeController {
     @DeleteMapping("/recipe/{id}")
     public ResponseEntity<Void> deleteRecipeById(@PathVariable @Valid long id) {
         recipeService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 
@@ -150,6 +151,10 @@ public class RecipeController {
     public ResponseEntity<List<RecipeDTO>> filterRecipe(
             @RequestParam(required = false) Boolean vegetarian,
             @RequestParam(required = false) Integer servings,
+            @Parameter(
+                    description = "Ingredients include",
+                    example = "Sauce,Cheese"
+            )
             @RequestParam(required = false, defaultValue = "") String include,
             @RequestParam(required = false, defaultValue = "") String exclude,
             @RequestParam(required = false) String instructionsContains,

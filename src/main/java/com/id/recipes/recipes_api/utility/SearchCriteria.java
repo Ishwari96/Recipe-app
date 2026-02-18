@@ -1,7 +1,6 @@
 package com.id.recipes.recipes_api.utility;
 
 import java.util.List;
-import java.util.Objects;
 
 public record SearchCriteria(
         Boolean vegetarian,
@@ -37,37 +36,4 @@ public record SearchCriteria(
         return includeExclude;
     }
 
-    /** Optional: normalize lists/strings to avoid null/blank noise */
-    public static SearchCriteria of(
-            Boolean vegetarian,
-            Integer servings,
-            List<String> include,
-            List<String> exclude,
-            String instructionsContains,
-            String instructionsNotContains
-    ) {
-        return new SearchCriteria(
-                vegetarian,
-                servings,
-                cleanList(include),
-                cleanList(exclude),
-                trimToNull(instructionsContains),
-                trimToNull(instructionsNotContains)
-        );
-    }
-
-    private static List<String> cleanList(List<String> items) {
-        if (items == null) return List.of();
-        return items.stream()
-                .filter(Objects::nonNull)
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .toList();
-    }
-
-    private static String trimToNull(String s) {
-        if (s == null) return null;
-        String t = s.trim();
-        return t.isEmpty() ? null : t;
-    }
 }

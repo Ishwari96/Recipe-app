@@ -16,7 +16,7 @@
 							"var intupdate = 5;\r",
 							"postman.setGlobalVariable(\"udpateRecipe\", intupdate);\r",
 							"\r",
-							"var invalidSearch=\"hardikL:hardik\";\r",
+							"var invalidSearch=\"id:ishwari\";\r",
 							"var validSearch=\"isVegetarian:false\";\r",
 							"postman.setGlobalVariable(\"invalidSearch\", invalidSearch);\r",
 							"postman.setGlobalVariable(\"validSearch\", validSearch);"
@@ -86,19 +86,19 @@
 							"var strName=\"Egg Biryani with Cheese, panees and Sauces\";\r",
 							"var intPerson= 2;\r",
 							"\r",
-							"var strCookingInstruction=\"Egg Biryani\";\r",
+							"var instruction=\"Egg Biryani\";\r",
 							"var strIngredientName= \"Eggs\";\r",
 							"var intIngredientDesciption=\"Boiled Potatoes\";\r",
-							"var strCookingInstruction=\"Prepare fried Samosa\"\r",
+							"var instruction=\"Prepare fried Samosa\"\r",
 							"\r",
 							"var bolVegetarian= true;\r",
 							"\r",
 							"pm.environment.set(\"strName\", strName);\r",
 							"pm.environment.set(\"intPerson\", intPerson);\r",
-							"pm.environment.set(\"strCookingInstruction\", strCookingInstruction);\r",
+							"pm.environment.set(\"instruction\", instruction);\r",
 							"pm.environment.set(\"strIngredientName\", strIngredientName);\r",
 							"pm.environment.set(\"intIngredientDesciption\", intIngredientDesciption);\r",
-							"pm.environment.set(\"strCookingInstruction\", strCookingInstruction);\r",
+							"pm.environment.set(\"instruction\", instruction);\r",
 							"pm.environment.set(\"bolVegetarian\", bolVegetarian);"
 						],
 						"type": "text/javascript"
@@ -143,7 +143,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"{{strName}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookingInstruction\": \"{{strCookingInstruction}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{strCookingInstruction}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
+					"raw": "{\r\n    \"name\": \"{{strName}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookinginstruction\": \"{{instruction}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{instruction}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
 				},
 				"url": {
 					"raw": "{{LocalUrl}}",
@@ -166,19 +166,19 @@
 							"var strName=\"Egg Biryani\";\r",
 							"var intPerson= 2;\r",
 							"\r",
-							"var strCookingInstruction=\"Egg Biryani\";\r",
+							"var instruction=\"Egg Biryani\";\r",
 							"var strIngredientName= \"Eggs\";\r",
 							"var intIngredientDesciption=\"Boiled Potatoes\";\r",
-							"var strCookingInstruction=\"Prepare fried Samosa\"\r",
+							"var instruction=\"Prepare fried Samosa\"\r",
 							"\r",
 							"var bolVegetarian= true;\r",
 							"\r",
 							"pm.environment.set(\"strName\", strName);\r",
 							"pm.environment.set(\"intPerson\", intPerson);\r",
-							"pm.environment.set(\"strCookingInstruction\", strCookingInstruction);\r",
+							"pm.environment.set(\"instruction\", instruction);\r",
 							"pm.environment.set(\"strIngredientName\", strIngredientName);\r",
 							"pm.environment.set(\"intIngredientDesciption\", intIngredientDesciption);\r",
-							"pm.environment.set(\"strCookingInstruction\", strCookingInstruction);\r",
+							"pm.environment.set(\"instruction\", instruction);\r",
 							"pm.environment.set(\"bolVegetarian\", bolVegetarian);"
 						],
 						"type": "text/javascript"
@@ -233,7 +233,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"{{strName}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookingInstruction\": \"{{strCookingInstruction}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{strCookingInstruction}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
+					"raw": "{\r\n    \"name\": \"{{strName}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookinginstruction\": \"{{instruction}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{instruction}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
 				},
 				"url": {
 					"raw": "{{LocalUrl}}",
@@ -300,7 +300,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": {{prodID}},\r\n    \"name\": \"{{strName}}\",\r\n    \"createDate\": \"{{createDate}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookingInstruction\": \"{{strCookingInstruction}} + test\",\r\n    \"ingredients\": [\r\n        {\r\n            \"id\": {{ingredientId}},\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{intIngredientDesciption}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
+					"raw": "{\r\n    \"id\": {{prodID}},\r\n    \"name\": \"{{strName}}\",\r\n    \"createDate\": \"{{createDate}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookinginstruction\": \"{{instruction}} + test\",\r\n    \"ingredients\": [\r\n        {\r\n            \"id\": {{ingredientId}},\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{intIngredientDesciption}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
 				},
 				"url": {
 					"raw": "{{LocalUrl}}{{udpateRecipe}}",
