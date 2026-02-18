@@ -1,14 +1,20 @@
 package com.id.recipes.recipes_api.service;
 
 import com.id.recipes.recipes_api.exception.RecipeNotFoundException;
+import com.id.recipes.recipes_api.model.Ingredient;
 import com.id.recipes.recipes_api.model.Recipe;
-import com.id.recipes.recipes_api.model.RecipeDTO;
+import com.id.recipes.recipes_api.model.dto.RecipeDTO;
+import com.id.recipes.recipes_api.utility.SearchCriteria;
+import com.id.recipes.recipes_api.model.rest.RecipeRequest;
 import com.id.recipes.recipes_api.repository.RecipeRepository;
+import com.id.recipes.recipes_api.utility.RecipeSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,21 +56,33 @@ public class RecipeServiceImpl implements RecipeService{
      */
     @Override
     public void deleteById(long recipeId) {
-        recipeRepository.deleteById(recipeId);
+        try {
+            recipeRepository.deleteById(recipeId);
+        }  catch (EmptyResultDataAccessException ex) {
+            throw new RecipeNotFoundException("Recipe not found for id=" + recipeId);
+        }
+
     }
 
     /**
      * Creates the recipe.
      *
-     * @param recipe the recipe
+     * @param recipeRequest the recipe request received
      * @return the recipe
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public Recipe createRecipe(Recipe recipe) {
-        if(recipe.getIngredients() != null) {
-            recipe.setIngredients(normalizeList(recipe.getIngredients()));
+    public Recipe createRecipe(RecipeRequest recipeRequest) {
+        Recipe createRecipe = new Recipe();
+        createRecipe.setTitle(recipeRequest.getTitle());
+        createRecipe.setVegetarian(recipeRequest.isVegetarian());
+        createRecipe.setServings(recipeRequest.getNumberOfPerson());
+        createRecipe.setInstructions(recipeRequest.getCookingInstruction());
+        if(recipeRequest.getIngredients() != null) {
+
+            createRecipe.setIngredients(Set.copyOf(recipeRequest.getIngredients()));
         }
-        return recipeRepository.save(recipe);
+        return recipeRepository.save(createRecipe);
     }
 
     /**
@@ -74,26 +92,40 @@ public class RecipeServiceImpl implements RecipeService{
      * @return the recipe
      */
     @Override
-    public Recipe updateRecipe(long id, Recipe updatedRecipe) {
+    public Recipe updateRecipe(long id, RecipeRequest updatedRecipe) {
         Recipe existingRecipe = recipeRepository.findById(id)
-                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id " ));
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id "+ id ));
 
         //update fields (selective)
         existingRecipe.setTitle(updatedRecipe.getTitle());
         existingRecipe.setVegetarian(updatedRecipe.isVegetarian());
-        existingRecipe.setServings(updatedRecipe.getServings());
-        existingRecipe.setInstructions(updatedRecipe.getInstructions());
+        existingRecipe.setServings(updatedRecipe.getNumberOfPerson());
+        existingRecipe.setInstructions(updatedRecipe.getCookingInstruction());
 
         //normalize and set ingredients
-        existingRecipe.setIngredients(normalizeList(updatedRecipe.getIngredients()));
-        return recipeRepository.save(updatedRecipe);
+        for (Ingredient ingredient : updatedRecipe.getIngredients()) {
+            this.updateIngredient(ingredient, existingRecipe.getIngredients());
+        }
+
+        return recipeRepository.save(existingRecipe);
     }
 
-    private List<String> normalizeList(List<String> list) {
-        if(list == null) return null;
-        return list.stream()
-                .filter(s -> s != null && !s.trim().isEmpty())
-                .map(s -> s.trim().toLowerCase())
-                .collect(Collectors.toList());
+    /**
+     * Search criteria
+     * @param searchCriteria received from front end
+     * @return list of recipe
+     */
+    public List<Recipe> findBySearchCriteria(SearchCriteria searchCriteria) {
+        List<Recipe> entities =  recipeRepository.findAll(RecipeSpecification.search(searchCriteria));
+        return entities;
+    }
+
+    private void updateIngredient(Ingredient ingredientParam, Set<Ingredient> listIngredients) {
+        for (Ingredient ingredient : listIngredients) {
+            if (ingredient.getId() == ingredientParam.getId()) {
+                ingredient.setDescription(ingredientParam.getDescription());
+                ingredient.setName(ingredientParam.getName());
+            }
+        }
     }
 }

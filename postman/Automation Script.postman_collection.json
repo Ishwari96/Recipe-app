@@ -1,0 +1,685 @@
+{
+	"info": {
+		"_postman_id": "125738e5-5172-43fb-9c76-cc6a36424a17",
+		"name": "abn-assessment Automation Script",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getall",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "072f0184-3c29-4f6a-97df-fb2e337d8bd1",
+						"exec": [
+							"var intupdate = 5;\r",
+							"postman.setGlobalVariable(\"udpateRecipe\", intupdate);\r",
+							"\r",
+							"var invalidSearch=\"hardikL:hardik\";\r",
+							"var validSearch=\"isVegetarian:false\";\r",
+							"postman.setGlobalVariable(\"invalidSearch\", invalidSearch);\r",
+							"postman.setGlobalVariable(\"validSearch\", validSearch);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "f10bc9ff-cb2f-4a3a-9962-e4a4a32e0e56",
+						"exec": [
+							"let cookieJar = pm.cookies.jar();\r",
+							"//depend on what whitelist domains are\r",
+							"ClrCookie=pm.environment.get(\"localhost\");\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{LocalUrl}}",
+					"host": [
+						"{{LocalUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Recipe 400",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0b415939-9577-4ac6-8fa2-a3a976974e0f",
+						"exec": [
+							"\r",
+							"var strName=\"Egg Biryani with Cheese, panees and Sauces\";\r",
+							"var intPerson= 2;\r",
+							"\r",
+							"var strCookingInstruction=\"Egg Biryani\";\r",
+							"var strIngredientName= \"Eggs\";\r",
+							"var intIngredientDesciption=\"Boiled Potatoes\";\r",
+							"var strCookingInstruction=\"Prepare fried Samosa\"\r",
+							"\r",
+							"var bolVegetarian= true;\r",
+							"\r",
+							"pm.environment.set(\"strName\", strName);\r",
+							"pm.environment.set(\"intPerson\", intPerson);\r",
+							"pm.environment.set(\"strCookingInstruction\", strCookingInstruction);\r",
+							"pm.environment.set(\"strIngredientName\", strIngredientName);\r",
+							"pm.environment.set(\"intIngredientDesciption\", intIngredientDesciption);\r",
+							"pm.environment.set(\"strCookingInstruction\", strCookingInstruction);\r",
+							"pm.environment.set(\"bolVegetarian\", bolVegetarian);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d9bca292-c3eb-492f-a5df-72e65bf3a030",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{strName}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookingInstruction\": \"{{strCookingInstruction}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{strCookingInstruction}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
+				},
+				"url": {
+					"raw": "{{LocalUrl}}",
+					"host": [
+						"{{LocalUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Recipe",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b92190f1-7482-4f6f-8c59-65e81f465952",
+						"exec": [
+							"\r",
+							"var strName=\"Egg Biryani\";\r",
+							"var intPerson= 2;\r",
+							"\r",
+							"var strCookingInstruction=\"Egg Biryani\";\r",
+							"var strIngredientName= \"Eggs\";\r",
+							"var intIngredientDesciption=\"Boiled Potatoes\";\r",
+							"var strCookingInstruction=\"Prepare fried Samosa\"\r",
+							"\r",
+							"var bolVegetarian= true;\r",
+							"\r",
+							"pm.environment.set(\"strName\", strName);\r",
+							"pm.environment.set(\"intPerson\", intPerson);\r",
+							"pm.environment.set(\"strCookingInstruction\", strCookingInstruction);\r",
+							"pm.environment.set(\"strIngredientName\", strIngredientName);\r",
+							"pm.environment.set(\"intIngredientDesciption\", intIngredientDesciption);\r",
+							"pm.environment.set(\"strCookingInstruction\", strCookingInstruction);\r",
+							"pm.environment.set(\"bolVegetarian\", bolVegetarian);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "a5a9b33b-192b-4900-b500-aa385a703f9b",
+						"exec": [
+							"returnJson=pm.response.json()\r",
+							"var recipeId = returnJson.id\r",
+							"var recipeCreateDate = returnJson.createDate\r",
+							"var recipeIdIngredients = returnJson.ingredients[0].id\r",
+							"pm.environment.set(\"prodID\", recipeId);\r",
+							"pm.environment.set(\"prodDate\", recipeCreateDate);\r",
+							"pm.environment.set(\"ingredientId\", recipeIdIngredients);\r",
+							"\r",
+							"pm.environment.set(\"udpateRecipe\", recipeId)\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{strName}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookingInstruction\": \"{{strCookingInstruction}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{strCookingInstruction}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
+				},
+				"url": {
+					"raw": "{{LocalUrl}}",
+					"host": [
+						"{{LocalUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Recipe",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9e47e132-74aa-46e2-93e5-6acbaa3022e6",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9c455b29-4ce6-46ee-b949-3683a0800740",
+						"exec": [
+							"let cookieJar = pm.cookies.jar();\r",
+							"//depend on what whitelist domains are\r",
+							"ClrCookie=pm.environment.get(\"LocalUrl\");\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": {{prodID}},\r\n    \"name\": \"{{strName}}\",\r\n    \"createDate\": \"{{createDate}}\",\r\n    \"numberOfPerson\": {{intPerson}},\r\n    \"cookingInstruction\": \"{{strCookingInstruction}} + test\",\r\n    \"ingredients\": [\r\n        {\r\n            \"id\": {{ingredientId}},\r\n            \"ingredientName\": \"{{strIngredientName}}\",\r\n            \"ingredientDesciption\": \"{{intIngredientDesciption}}\"\r\n        }\r\n    ],\r\n    \"vegetarian\": {{bolVegetarian}}\r\n}"
+				},
+				"url": {
+					"raw": "{{LocalUrl}}{{udpateRecipe}}",
+					"host": [
+						"{{LocalUrl}}{{udpateRecipe}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ddb523ae-6c3f-42b1-b7ac-e1685d456663",
+						"exec": [
+							"let cookieJar = pm.cookies.jar();\r",
+							"//depend on what whitelist domains are\r",
+							"ClrCookie=pm.environment.get(\"LocalUrl\");\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{LocalUrl}}{{udpateRecipe}}",
+					"host": [
+						"{{LocalUrl}}{{udpateRecipe}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findById Negetive",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "364ef644-138e-49ec-9691-5b590a68c127",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{LocalUrl}}{{udpateRecipe}}",
+					"host": [
+						"{{LocalUrl}}{{udpateRecipe}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findById Positive",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "99388f6c-7f2c-4136-a90f-211f337fe80d",
+						"exec": [
+							"pm.environment.set(\"udpateRecipe\", 1)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "243164e8-4360-4875-8fb2-0627716d087c",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{LocalUrl}}{{udpateRecipe}}",
+					"host": [
+						"{{LocalUrl}}{{udpateRecipe}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search Exception handling",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "45818a54-873c-4231-9fdc-51382c596019",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{LocalUrl}}searchByCriteria/{{invalidSearch}}",
+					"host": [
+						"{{LocalUrl}}searchByCriteria"
+					],
+					"path": [
+						"{{invalidSearch}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search check equality",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c3e5dc0-3dba-4e5e-81eb-3d403b80d3f5",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{LocalUrl}}searchByCriteria/{{validSearch}}",
+					"host": [
+						"{{LocalUrl}}searchByCriteria"
+					],
+					"path": [
+						"{{validSearch}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search check greater than",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fad1092-4b93-4bc5-8377-e11b2a8bfa36",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{LocalUrl}}searchByCriteria/numberOfPerson>3",
+					"host": [
+						"{{LocalUrl}}searchByCriteria"
+					],
+					"path": [
+						"numberOfPerson>3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search check less than",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "10874531-7329-4b0c-8f1d-c1690feb21ca",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "user1Pass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{LocalUrl}}searchByCriteria/numberOfPerson<3",
+					"host": [
+						"{{LocalUrl}}searchByCriteria"
+					],
+					"path": [
+						"numberOfPerson<3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
