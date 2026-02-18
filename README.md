@@ -124,11 +124,12 @@ Swagger is integrated for easy access of API. It can be accessed via `http://loc
 
 - Search Recipe By Criteria
     - This method searches for the recipe that fits into the given criteria. User can search by any field of the Recipe. Following are the fields of the recipe.
-        - name
-        - servings
-        - cookingInstruction
         - vegetarian
-    - Search criteria needs field to search for with operator to apply on field.
+        - servings
+        - instructions Contains
+        - include ingredients
+        - exclude ingredients
+    - For now I have considered all query params for simplicity
         - vegetarian:true = here : is used to check equality. This criteria mean all the recipes which are vegetarian.
         - servings = This is self-explanatory. It will bring all the recipes which can be served to more than 5 person.
     
@@ -150,6 +151,8 @@ As per the requirement given, User should be able to search in the recipes. Inst
 All the validations are imaginary, it is only for the demo purpose.
 
 Code coverage is not considered for model, repository and dto classes.
+
+Ingredient id is not needed in requestbody just to keep simple I have considered same model
 
 ## Next steps
 

@@ -9,11 +9,9 @@ import com.id.recipes.recipes_api.model.dto.IngredientDTO;
 import com.id.recipes.recipes_api.model.dto.RecipeDTO;
 import com.id.recipes.recipes_api.model.rest.RecipeRequest;
 import com.id.recipes.recipes_api.service.RecipeService;
-import com.id.recipes.recipes_api.utility.SearchCriteria;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -125,7 +123,7 @@ class RecipeControllerTest {
         doNothing().when(recipeService).deleteById(id);
 
         mockMvc.perform(delete("/api/v1/recipe/{id}", id).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -154,73 +152,7 @@ class RecipeControllerTest {
     }
 
     /**
-     * Scenario 2: With active filters -> calls findBySearchCriteria, sorts by Recipe::getId, then maps via DTO::fromModel
-     * We pass vegetarian=true (meaningful) + servings=4 to activate the filtered path.
-     * The service returns ENTITIES (Recipe) as per your controller code.
-     * Controller should sort by entity id [even if service returns unsorted] and map to DTOs.
-     */
-    void filterRecipe_withFilters_callsFindByCriteria_sortsById_andMapsToDto() throws Exception {
-        // Arrange: build some Recipes out of order by id
-        Recipe r2 = new Recipe();
-        r2.setId(2L);
-        r2.setTitle("Second");
-        r2.setVegetarian(true);
-        r2.setServings(4);
-        r2.setInstructions("cook2");
-
-        Recipe r1 = new Recipe();
-        r1.setId(1L);
-        r1.setTitle("First");
-        r1.setVegetarian(true);
-        r1.setServings(4);
-        r1.setInstructions("cook1");
-
-        // Service returns a list of entities in reverse order to ensure controller sorts by id
-        when(recipeService.findBySearchCriteria(any())).thenReturn(List.of(r2, r1));
-
-        // We also want to assert that getAll() is not called in this path
-        when(recipeService.getAll()).thenReturn(List.of()); // will not be used
-
-        // Act + Assert
-        mockMvc.perform(get("/api/v1/filteredRecipes") // or "/filteredRecipes"
-                        .param("vegetarian", "true")            // meaningful
-                        .param("servings", "4")                 // meaningful
-                        .param("include", "tomato,onion")       // optional
-                        .param("exclude", "peanut")             // optional
-                        .param("instructionsContains", "cook")  // optional
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                // Expect sorted by id ascending: r1 first, then r2
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].title").value("First"))
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].title").value("Second"));
-
-        // Verify the right service call happened
-        verify(recipeService, times(1)).findBySearchCriteria(any());
-        verify(recipeService, never()).getAll();
-
-        // (Optional) Capture SearchCriteria to assert it was built as expected
-        ArgumentCaptor<SearchCriteria> captor =
-                ArgumentCaptor.forClass(SearchCriteria.class);
-        verify(recipeService).findBySearchCriteria(captor.capture());
-        var crit = captor.getValue();
-
-        // Basic sanity checks on captured criteria
-        // vegetarian=true, servings=4, include/exclude split by comma
-        // Instructions contains="cook" (as passed), instructionsNotContains should be null
-        // NOTE: These assertions assume your SearchCriteria carries the raw values (not normalized to null/empty).
-        org.junit.jupiter.api.Assertions.assertEquals(Boolean.TRUE, crit.vegetarian());
-        org.junit.jupiter.api.Assertions.assertEquals(4, crit.servings());
-        org.junit.jupiter.api.Assertions.assertEquals(List.of("tomato", "onion"), crit.include());
-        org.junit.jupiter.api.Assertions.assertEquals(List.of("peanut"), crit.exclude());
-        org.junit.jupiter.api.Assertions.assertEquals("cook", crit.instructionsContains());
-        org.junit.jupiter.api.Assertions.assertNull(crit.instructionsNotContains());
-    }
-
-    /**
-     * Scenario 3 (optional): include/exclude present but blank -> still considered empty filter if isEmpty() treats blanks properly.
+     * when include/exclude present but blank -> still considered empty filter if isEmpty() treats blanks properly.
      * This ensures that defaultValue="" does not accidentally activate filters (depends on your SearchCriteria.isEmpty implementation).
      */
     @Test

@@ -56,12 +56,11 @@ public class RecipeServiceImpl implements RecipeService{
      */
     @Override
     public void deleteById(long recipeId) {
-        try {
-            recipeRepository.deleteById(recipeId);
-        }  catch (EmptyResultDataAccessException ex) {
-            throw new RecipeNotFoundException("Recipe not found for id=" + recipeId);
-        }
 
+        if (!recipeRepository.existsById(recipeId)) {
+            throw new RecipeNotFoundException("Recipe not found with id: " + recipeId);
+        }
+        recipeRepository.deleteById(recipeId);
     }
 
     /**
