@@ -1,15 +1,18 @@
 package com.id.recipes.recipes_api.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "recipe", schema = "public")
+@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class Recipe {
 
     @Id
@@ -20,10 +23,14 @@ public class Recipe {
 
     private boolean vegetarian;
     private int servings;
-    @ElementCollection
-    @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
-    @Column(name = "ingredient")
-    private List<String> ingredients;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(name = "ingredients")
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Set<Ingredient> ingredients = new HashSet<>();
+
     @Column(columnDefinition = "TEXT")
     private String instructions;
+
+
 }
